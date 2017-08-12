@@ -1,0 +1,83 @@
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+{% if signUp %}
+  #signUp {display:block;}
+  #signIn {display:none;}
+{% else %}
+  #signUp {display:none;}
+  #signIn {display:block;}
+{% endif %}
+
+</style>
+
+<script>
+
+function show_signUp(id) {
+  var e1 = document.getElementById('signIn');
+  var e2 = document.getElementById('signUp');
+  e1.style.display = 'none';
+  e2.style.display = 'block';
+}
+
+function show_signIn(id) {
+  var e1 = document.getElementById('signIn');
+  var e2 = document.getElementById('signUp');
+  e1.style.display = 'block';
+  e2.style.display = 'none';
+}
+
+</script>
+
+
+<form action="/login" method="POST">
+  <div class="login">
+    <div class="login-screen">
+      <div class="app-title">
+        <h1>Login</h1>
+      </div>
+
+      <div class="login-form" id="signIn">
+        <div class="control-group">
+          <input type="text" class="login-field" value="" placeholder="usuario" name="username">
+          <label class="login-field-icon fui-user" for="login-name"></label>
+        </div>
+
+        <div class="control-group">
+          <input type="password" class="login-field" value="" placeholder="password" name="password">
+          <label class="login-field-icon fui-lock" for="login-pass"></label>
+        </div>
+        <input type="submit" value="Ingresar" class="btn btn-primary btn-large btn-block" >
+        <br>
+        <a href="#" onclick="show_signUp();">Registrarse</a>
+      </div>
+
+      <div class="login-form" id="signUp">
+        <div class="control-group">
+          <input type="text" class="login-field" value="" placeholder="usuario" name="username1">
+          <label class="login-field-icon fui-user" for="login-name"></label>
+        </div>
+
+        <div class="control-group">
+          <input type="password" class="login-field" value="" placeholder="password" name="password1">
+          <label class="login-field-icon fui-lock" for="login-pass"></label>
+        </div>
+        <div class="control-group">
+          <input type="password" class="login-field" value="" placeholder="password" name="password2">
+          <label class="login-field-icon fui-lock" for="login-pass"></label>
+        </div>
+
+        <input type="submit" value="Registrarse" class="btn btn-primary btn-large btn-block" >
+        <br>
+        <a href="#" onclick="show_signIn();">Ingresar</a>
+      </div>
+
+
+      {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+
+    </div>
+  </div>
+</form>
