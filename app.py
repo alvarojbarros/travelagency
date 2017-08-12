@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user,cu
 app = Flask(__name__)
 from db.User import User
 from tools.dbtools import Session
+import re
 
 app.config.update(
     DEBUG = True,
@@ -62,6 +63,41 @@ def login():
         return render_template('login.html',error_msg='Datos Incorrectos',signIn=False)
     else:
         return render_template('login.html',signUp=False)
+
+# somewhere to login
+@app.route("/signin", methods=["GET", "POST"])
+def signin():
+    if request.method == 'POST':
+        username1 = request.form['username1']
+        username2 = request.form['username2']
+        if username1: username1 = username1.replace(" ", "")
+        if username2: username2 = username2.replace(" ", "")
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+        name = request.form['name']
+        if password1 or password2 or username1 or username2:
+            if not username1 or not username2:
+                return render_template('login.html', error_msg='Debe Ingresar Email',signUp=True)
+            if username1 != username2:
+                return render_template('login.html', error_msg='Los Email no coinciden')
+            match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', username1)
+            if not match:
+                return render_template('login.html',error_msg='Debe ingresar un correo válido')
+            user = User.getUserIdByEmail(username1)
+            if user:
+                return render_template('login.html',error_msg='Usuario ya registrado: %s' % username1, signUp=True)
+            if password1 != password2:
+                return render_template('login.html', error_msg='Los Password no coinciden',signUp=True)
+            new_user = User.addNewUser(username1, password1, name)
+            if new_user:
+                login_user(new_user)
+                return redirect('/')
+            else:
+                return render_template('login.html', error_msg=new_user, signUp=True)
+        return render_template('login.html', error_msg='Datos Incorrectos', signIn=False)
+
+    else:
+        return render_template('login.html', signUp=False)
 
 
 # somewhere to logout

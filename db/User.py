@@ -30,6 +30,26 @@ class User(Base,Record,UserMixin):
         session.close()
         return user_data
 
+    @classmethod
+    def addNewUser(cls,email,password,name):
+        session = Session()
+        new_user = User()
+        new_user.Password = password
+        new_user.syncVersion = 0
+        new_user.Name = name
+        new_user.Email = email
+        session.add(new_user)
+        try:
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            session.close()
+            return str(e)
+        user = session.query(User).filter_by(Email=email).first()
+        session.close()
+        if user:
+            return user
+
 
 Index('Email', User.Email, unique=True)
 

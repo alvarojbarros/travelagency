@@ -31,16 +31,16 @@ function show_signIn(id) {
 </script>
 
 
-<form action="/login" method="POST">
-  <div class="login">
+<div class="login" id="signIn">
+  <form action="/login" method="POST">
     <div class="login-screen">
       <div class="app-title">
-        <h1>Login</h1>
+        <h1>Ingresar</h1>
       </div>
 
-      <div class="login-form" id="signIn">
+      <div class="login-form" >
         <div class="control-group">
-          <input type="text" class="login-field" value="" placeholder="usuario" name="username">
+          <input type="text" class="login-field" value="" placeholder="email" name="username">
           <label class="login-field-icon fui-user" for="login-name"></label>
         </div>
 
@@ -53,9 +53,32 @@ function show_signIn(id) {
         <a href="#" onclick="show_signUp();">Registrarse</a>
       </div>
 
-      <div class="login-form" id="signUp">
+      {% if error_msg %}
+        <p class=error><strong>Error:</strong> {{ error_msg }}
+      {% endif %}
+
+    </div>
+  </form>
+</div>
+
+<div class="login" id="signUp">
+  <form action="/signin" method="POST">
+    <div class="login-screen">
+      <div class="app-title">
+        <h1>Registrarse</h1>
+      </div>
+
+      <div class="login-form" >
         <div class="control-group">
-          <input type="text" class="login-field" value="" placeholder="usuario" name="username1">
+          <input type="text" class="login-field" value="" placeholder="email" name="username1">
+          <label class="login-field-icon fui-user" for="login-name"></label>
+        </div>
+        <div class="control-group">
+          <input type="text" class="login-field" value="" placeholder="email" name="username2">
+          <label class="login-field-icon fui-user" for="login-name"></label>
+        </div>
+        <div class="control-group">
+          <input type="text" class="login-field" value="" placeholder="Nombre" name="name">
           <label class="login-field-icon fui-user" for="login-name"></label>
         </div>
 
@@ -74,10 +97,10 @@ function show_signIn(id) {
       </div>
 
 
-      {% if error %}
-        <p class=error><strong>Error:</strong> {{ error }}
+      {% if error_msg %}
+        <p class=error><strong>Error:</strong> {{ error_msg }}
       {% endif %}
 
     </div>
-  </div>
-</form>
+  </form>
+</div>
