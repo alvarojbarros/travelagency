@@ -1,0 +1,28 @@
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tools.js') }}"></script>
+
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+<div>
+  <h1>{{username}}</h1>
+</div>
+<div>
+  <a href="/logout">LOGOUT</a>
+</div>
+<div>
+  <a href="#" onclick="showUsers()">Mostrar Usuarios</a>
+</div>
+
+<div id="user_list">
+  <ul>
+    <li v-for="user in users">
+      <div>{%raw%}{{user.Name}}{%endraw%}</div>
+    </li>
+  </ul>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/userlist.js') }}"></script>

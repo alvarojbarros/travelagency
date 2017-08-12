@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user,current_user
 app = Flask(__name__)
 from db.User import User
@@ -42,7 +42,7 @@ def home():
     for record in records:
         l.append(record.Email)
     return str(l) '''
-    return '<a href="/logout">LOGIUT</a>'
+    return render_template('index.html',username=current_user.Name)
 
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
@@ -112,6 +112,18 @@ def logout():
 @login_manager.user_loader
 def load_user(userid):
     return User.get(userid)
+
+@app.route("/_get_users_list")
+@login_required
+def get_users_list():
+    session = Session()
+    records = session.query(User)
+    l = []
+    for record in records:
+        user_json = record.toJSON()
+        l.append(user_json)
+    return jsonify(result=l)
+
 
 
 if __name__ == "__main__":

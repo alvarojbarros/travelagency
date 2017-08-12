@@ -50,6 +50,13 @@ class User(Base,Record,UserMixin):
         if user:
             return user
 
+    def toJSON(self):
+        res = {}
+        res['Name'] = self.Name
+        res['id'] = str(self.id)
+        res['Email'] = self.Email
+        return res
+
 
 Index('Email', User.Email, unique=True)
 
