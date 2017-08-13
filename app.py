@@ -124,6 +124,10 @@ def get_users_list():
         l.append(user_json)
     return jsonify(result=l)
 
+@app.route("/users")
+@login_required
+def users():
+    return render_template('users.html', username=current_user.Name)
 
 
 if __name__ == "__main__":

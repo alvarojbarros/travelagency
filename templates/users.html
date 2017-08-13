@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% block container %}
+
+<div id="user_list">
+  <ul>
+    <li v-for="user in users">
+      <div>{%raw%}{{user.Name}}{%endraw%}</div>
+    </li>
+  </ul>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/userlist.js') }}"></script>
+
+<script type=text/javascript>
+  showUsers()
+</script>
+
+{% endblock %}
