@@ -166,6 +166,33 @@ def get_services_list():
 def services():
     return render_template('services.html', username=current_user.Name)
 
+@app.route("/_save_service",methods=['GET', 'POST'])
+@login_required
+def save_service():
+    #price = float(request.args.get('price','0.0'))
+    #name = request.args.get('name',None)
+    price = float(request.form.get('price','0.0'))
+    name = request.form.get('name',None)
+
+    session = Session()
+    session.expire_on_commit = False
+
+    new_service = Services()
+    new_service.Price = price
+    new_service.Name = name
+    session.add(new_service)
+    try:
+        session.commit()
+        session.close()
+        service_json = new_service.toJSON()
+        return jsonify(result={'ok':True,'record': service_json})
+    except Exception as e:
+        session.rollback()
+        session.close()
+        return jsonify(result={'ok':False,'error':str(e)})
+
+
+
 if __name__ == "__main__":
     app.run(host= '0.0.0.0')
 
