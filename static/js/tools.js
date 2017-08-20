@@ -4,3 +4,10 @@ function showUsers(){
 	    console.log(data.result)
 	});
 }
+
+function showServices(){
+	$.getJSON($SCRIPT_ROOT + '/_get_services_list', {} ,function(data) {
+	    vue_services_list.services = data.result;
+	    console.log(data.result)
+	});
+}

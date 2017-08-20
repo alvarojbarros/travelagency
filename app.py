@@ -2,6 +2,7 @@ from flask import Flask,render_template,request,redirect,jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user,current_user
 app = Flask(__name__)
 from db.User import User
+from db.Services import Services
 from tools.dbtools import Session
 import re
 
@@ -42,7 +43,27 @@ def home():
     for record in records:
         l.append(record.Email)
     return str(l) '''
-    return render_template('index.html',username=current_user.Name)
+  
+    # session = Session()
+    # session.expire_on_commit = False
+
+    # new_services = Services()
+    # new_services.Name = 'Caribe'
+    # new_services.Price = '1000Eur'
+    # session.add(new_services)
+    # try:
+    #     session.commit()
+    #     session.close()
+    #     return 'Registro Grabado: %i' % new_services.id
+    # except Exception as e:
+    #     session.rollback()
+    #     session.close()
+    #     return str(e)
+
+ 
+    return render_template('index.html', username=current_user.Name)
+
+
 
 # somewhere to login
 @app.route("/login", methods=["GET", "POST"])
@@ -129,6 +150,21 @@ def get_users_list():
 def users():
     return render_template('users.html', username=current_user.Name)
 
+@app.route("/_get_services_list")
+@login_required
+def get_services_list():
+    session = Session()
+    records = session.query(Services)
+    l = []
+    for record in records:
+        user_json = record.toJSON()
+        l.append(user_json)
+    return jsonify(result=l)
+
+@app.route("/services")
+@login_required
+def services():
+    return render_template('services.html', username=current_user.Name)
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0')

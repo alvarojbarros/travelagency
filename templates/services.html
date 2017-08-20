@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+
+{% block container %}
+
+<div id="services_list">
+  <ul>
+    <li v-for="service in services">
+      <div>{%raw%}{{service.Name}} {{service.Price}}{%endraw%}</div>
+
+    </li>
+  </ul>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/serviceslist.js') }}"></script>
+
+<script type=text/javascript>
+  showServices()
+</script>
+
+{% endblock %}
