@@ -2,15 +2,7 @@
 
 {% block container %}
 
-<div id="services_list">
-  <ul>
-    <li v-for="service in services">
-      <div> <a :onclick="'setServiceForm('+service+')'">{%raw%} {{service.id}} {{service.Name}} {{service.Price}}{%endraw%}</a></div>
 
-    </li>
-  </ul>
-
-</div>
 <div id="service_record">
   <form action="/">
     <div>
@@ -26,6 +18,16 @@
     </div>
 
   </form>
+</div>
+
+<div id="services_list">
+  <ul>
+    <li v-for="(service,index) in services">
+      <div>
+        <a :onclick="'setServiceForm('+service.id+','+index+')'">{%raw%} {{service.id}} {{service.Name}} {{service.Price}}{%endraw%}</a>
+      </div>
+    </li>
+  </ul>
 </div>
 
 <script src="{{ url_for('static', filename='js/serviceslist.js') }}"></script>

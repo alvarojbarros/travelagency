@@ -5,5 +5,6 @@ var vue_service = new Vue({
   data: {
     Price: 0.0,
     Name: '',
+    id: '',
   },
 })

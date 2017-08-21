@@ -166,17 +166,10 @@ def get_services_list():
 def services():
     return render_template('services.html', username=current_user.Name)
 
-@app.route("/_save_service",methods=['GET', 'POST'])
-@login_required
-def save_service():
-    #price = float(request.args.get('price','0.0'))
-    #name = request.args.get('name',None)
-    price = float(request.form.get('price','0.0'))
-    name = request.form.get('name',None)
 
+def save_new_service(price,name):
     session = Session()
     session.expire_on_commit = False
-
     new_service = Services()
     new_service.Price = price
     new_service.Name = name
@@ -191,6 +184,52 @@ def save_service():
         session.close()
         return jsonify(result={'ok':False,'error':str(e)})
 
+
+@app.route("/_save_service",methods=['GET', 'POST'])
+@login_required
+def save_service():
+    #price = float(request.args.get('price','0.0'))
+    #name = request.args.get('name',None)
+    price = float(request.form.get('price','0.0'))
+    name = request.form.get('name',None)
+    id = request.form.get('id','')
+    record = None
+    if id:
+        session = Session()
+        session.expire_on_commit = False
+        id = int(id)
+        record = session.query(Services).filter_by(id=id).first()
+    if not record:
+        return save_new_service(price,name)
+    else:
+        record.Price = price
+        record.Name = name
+        try:
+            session.commit()
+            session.close()
+            service_json = record.toJSON()
+            return jsonify(result={'ok':True,'record': service_json})
+        except Exception as e:
+            session.rollback()
+            session.close()
+            return jsonify(result={'ok':False,'error':str(e)})
+
+
+
+@app.route("/_get_service",methods=['GET', 'POST'])
+@login_required
+def get_service():
+    id = request.form.get('id','')
+    session = Session()
+    session.expire_on_commit = False
+    id = int(id)
+    record = session.query(Services).filter_by(id=id).first()
+    if record:
+        service_json = record.toJSON()
+        session.close()
+        return jsonify(result={'ok': True, 'record': service_json})
+    else:
+        return jsonify(result={'ok': False, 'error': 'Registro no encontrado'})
 
 
 if __name__ == "__main__":
